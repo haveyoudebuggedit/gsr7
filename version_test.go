@@ -7,6 +7,8 @@ import (
 	"go.debugged.it/gsr7"
 )
 
+//region Examples
+
 func ExampleParseVersion() {
 	version, err := gsr7.ParseVersion("HTTP/1.1")
 	if err != nil {
@@ -43,6 +45,28 @@ func ExampleVersion_Compare() {
 
 	// Output: HTTP/1.0 is lower than HTTP/1.1
 }
+
+func ExampleVersion_String() {
+	fmt.Println(gsr7.HTTP11.String())
+
+	// Output: HTTP/1.1
+}
+
+func ExampleVersion_Major() {
+	fmt.Println(gsr7.HTTP10.Major())
+
+	// Output: 1
+}
+
+func ExampleVersion_Minor() {
+	fmt.Println(gsr7.HTTP10.Minor())
+
+	// Output: 0
+}
+
+//endregion
+
+//region Tests
 
 func TestParseVersion(t *testing.T) {
 	validData := map[string]gsr7.Version{
@@ -116,3 +140,5 @@ func TestVersionCompare(t *testing.T) {
 		"HTTP/1.0 is not equal to HTTP/1.0",
 	)
 }
+
+//endregion
