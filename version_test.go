@@ -15,14 +15,12 @@ func ExampleParseVersion() {
 		panic(err)
 	}
 	fmt.Println(version)
-
 	// Output: HTTP/1.1
 }
 
 func ExampleNewVersion() {
 	version := gsr7.Must(gsr7.NewVersion(0, 9))
 	fmt.Println(version)
-
 	// Output: HTTP/0.9
 }
 
@@ -32,7 +30,6 @@ func ExampleVersion_Equals() {
 	} else {
 		fmt.Println("HTTP/1.0 does not equal HTTP/1.1")
 	}
-
 	// Output: HTTP/1.0 does not equal HTTP/1.1
 }
 
@@ -42,25 +39,21 @@ func ExampleVersion_Compare() {
 	} else {
 		fmt.Println("HTTP/1.0 is not lower than HTTP/1.1")
 	}
-
 	// Output: HTTP/1.0 is lower than HTTP/1.1
 }
 
 func ExampleVersion_String() {
 	fmt.Println(gsr7.HTTP11.String())
-
 	// Output: HTTP/1.1
 }
 
 func ExampleVersion_Major() {
 	fmt.Println(gsr7.HTTP10.Major())
-
 	// Output: 1
 }
 
 func ExampleVersion_Minor() {
 	fmt.Println(gsr7.HTTP10.Minor())
-
 	// Output: 0
 }
 
