@@ -18,29 +18,46 @@ type ResponseCookie interface {
 	// indicating all subdomains. See https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.3 for details.
 	GetDomain() string
 	// WithDomain returns a new cookie object valid for the specified domain. This function does not modify the
-	// original cookie. The function returns an error if the domain is not valid for cookies.
+	// original cookie. The function panics if the domain is not valid for cookies.
 	//
 	// See https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.3 for details.
 	WithDomain(domain string) ResponseCookie
-
+	// WithDomainE returns a new cookie object valid for the specified domain. This function does not modify the
+	// original cookie. The function returns an error if the domain is not valid for cookies.
+	//
+	// See https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.3 for details.
 	WithDomainE(domain string) (ResponseCookie, error)
 
 	// GetPath returns the path the cookie is valid for.
 	// See https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.4 for details.
 	GetPath() string
 	// WithPath returns a new cookie object valid for the specified path. This function does not modify the original
-	// cookie. The function returns an error if the path is not valid for cookies.
+	// cookie. The function panics if the path is not valid for cookies.
 	//
 	// See https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.4 for details.
 	WithPath(path string) ResponseCookie
+	// WithPathE returns a new cookie object valid for the specified path. This function does not modify the original
+	// cookie. The function returns an error if the path is not valid for cookies.
+	//
+	// See https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.4 for details.
 	WithPathE(path string) (ResponseCookie, error)
 
+	// GetExpires returns the expiry time for the cookie, if set. If the expiry time is in the past the client will
+	// delete the cookie.
 	GetExpires() *time.Time
+	// WithExpires returns a copy of the cookie with the expiry time set. If the expiry time is in the past the client
+	// will delete the cookie.
 	WithExpires(expires time.Time) ResponseCookie
+	// WithoutExpires returns a copy of the cookie with the expiry time removed.
 	WithoutExpires() ResponseCookie
 
+	// GetMaxAge returns either nil, if max-age is not set, or the max-age for the cookie. A negative max-age will cause
+	// the client to delete the cookie.
 	GetMaxAge() *int
+	// WithMaxAge returns a new cookie with the set max-age parameter. A negative max-age will cause the client to
+	// delete the cookie.
 	WithMaxAge(deltaSeconds int) ResponseCookie
+	// WithoutMaxAge returns a cookie with the max-age parameter removed.
 	WithoutMaxAge() ResponseCookie
 
 	// GetSecure returns true if the cookie should only be transmitted over a secure (HTTPS) connection.
@@ -61,19 +78,24 @@ type ResponseCookie interface {
 	GetExtensions() []string
 	// WithExtensions creates a new cookie with the specified extensions. Extensions are other tags attached with a
 	// semicolon that are not part of the known standards for cookies. Extensions may contain any character except for
-	// control characters (ASCII 0-27, 127) and semicolons.
+	// control characters (ASCII 0-27, 127) and semicolons. If the extensions are invalid a panic is thrown.
 	WithExtensions(extensions []string) ResponseCookie
+	// WithExtensionsE creates a new cookie with the specified extensions. Extensions are other tags attached with a
+	// semicolon that are not part of the known standards for cookies. Extensions may contain any character except for
+	// control characters (ASCII 0-27, 127) and semicolons. If the extensions are invalid an error is returned.
 	WithExtensionsE(extensions []string) (ResponseCookie, error)
 
 	ToRequest() RequestCookie
 }
 
+// NewResponseCookie creates a new response cookie with the specified name. Other parameters can be added using
+//// methods on the returned cookie. If the name is invalid a panic is thrown.
 func NewResponseCookie(name string) ResponseCookie {
 	return Must(NewResponseCookieE(name))
 }
 
 // NewResponseCookieE creates a new response cookie with the specified name. Other parameters can be added using
-// methods on the returned cookie.
+// methods on the returned cookie. If the name is invalid an error is returned.
 func NewResponseCookieE(name string) (ResponseCookie, error) {
 	if err := validate(validateCookieName(name)); err != nil {
 		return nil, err
