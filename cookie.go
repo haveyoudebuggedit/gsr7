@@ -2,36 +2,36 @@ package gsr7
 
 import "time"
 
-type Cookie[T Cookie] interface {
-    Name() string
-    Value() string
+type Cookie[T any] interface {
+	Name() string
+	Value() string
 
-    WithName(name string) (T, error)
-    WithValue(value string) (T, error)
+	WithName(name string) (T, error)
+	WithValue(value string) (T, error)
 }
 
 type RequestCookie interface {
-    Cookie[RequestCookie]
+	Cookie[RequestCookie]
 }
 
 type ResponseCookie interface {
-    Cookie[ResponseCookie]
+	Cookie[ResponseCookie]
 
-    GetDomain() string
-    WithDomain(domain string) (ResponseCookie, error)
+	GetDomain() string
+	WithDomain(domain string) (ResponseCookie, error)
 
-    GetPath() string
-    WithPath(path string) (ResponseCookie, error)
+	GetPath() string
+	WithPath(path string) (ResponseCookie, error)
 
-    GetExpires() time.Time
-    WithExpires(expires time.Time) ResponseCookie
+	GetExpires() time.Time
+	WithExpires(expires time.Time) ResponseCookie
 
-    GetMaxAge() *int
-    SetMaxAge(deltaSeconds *int) ResponseCookie
+	GetMaxAge() *int
+	SetMaxAge(deltaSeconds *int) ResponseCookie
 
-    GetSecure() bool
-    WithSecure(secure bool) ResponseCookie
+	GetSecure() bool
+	WithSecure(secure bool) ResponseCookie
 
-    GetHTTPOnly() bool
-    WithHTTPOnly(httpOnly bool) ResponseCookie
+	GetHTTPOnly() bool
+	WithHTTPOnly(httpOnly bool) ResponseCookie
 }
