@@ -48,6 +48,22 @@ func validateCookieName(name string) validator {
 	}
 }
 
+func validateCookieValue(value string) validator {
+	return func() error {
+		for i, letter := range value {
+			// See https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.1 cookie-octet
+			if letter != 0x21 &&
+				!(letter >= 0x23 && letter <= 0x2B) &&
+				!(letter >= 0x2D && letter <= 0x3A) &&
+				!(letter >= 0x3C && letter <= 0x5B) &&
+				!(letter >= 0x5D && letter <= 0x7E) {
+				return fmt.Errorf("invalid character in cookie name position %d (%d)", i, letter)
+			}
+		}
+		return nil
+	}
+}
+
 func validateCookieDomain(domain string) validator {
 	return func() error {
 		for i, letter := range domain {

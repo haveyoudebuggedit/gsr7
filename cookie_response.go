@@ -158,10 +158,6 @@ func (r responseCookie) Name() string {
 	return r.name
 }
 
-func (r responseCookie) Value() string {
-	return r.value
-}
-
 func (r responseCookie) WithName(name string) ResponseCookie {
 	return Must(r.WithNameE(name))
 }
@@ -183,11 +179,18 @@ func (r responseCookie) WithNameE(name string) (ResponseCookie, error) {
 	}, nil
 }
 
+func (r responseCookie) Value() string {
+	return r.value
+}
+
 func (r responseCookie) WithValue(value string) ResponseCookie {
 	return Must(r.WithValueE(value))
 }
 
 func (r responseCookie) WithValueE(value string) (ResponseCookie, error) {
+	if err := validate(validateCookieValue(value)); err != nil {
+		return nil, err
+	}
 	return &responseCookie{
 		name:       r.name,
 		value:      value,
