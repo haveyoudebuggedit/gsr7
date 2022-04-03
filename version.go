@@ -6,6 +6,24 @@ import (
 	"strings"
 )
 
+//region Constants
+
+// HTTP09 represents HTTP version 0.9.
+var HTTP09 = Must(NewVersion(0, 9))
+
+// HTTP10 represents HTTP version 1.0.
+var HTTP10 = Must(NewVersion(1, 0))
+
+// HTTP11 represents HTTP version 1.1.
+var HTTP11 = Must(NewVersion(1, 1))
+
+// HTTP20 represents HTTP version 2.0.
+var HTTP20 = Must(NewVersion(2, 0))
+
+//endregion
+
+//region Interface
+
 // Version holds the HTTP
 type Version interface {
 	Equals[Version]
@@ -18,11 +36,6 @@ type Version interface {
 	// Minor returns the minor version of the HTTP version.
 	Minor() uint8
 }
-
-var HTTP09 = Must(NewVersion(0, 9))
-var HTTP10 = Must(NewVersion(1, 0))
-var HTTP11 = Must(NewVersion(1, 1))
-var HTTP20 = Must(NewVersion(2, 0))
 
 // NewVersion constructs a Version structure from the specified major and minor version.
 func NewVersion(major, minor uint8) (Version, error) {
@@ -72,6 +85,8 @@ func ParseVersion(versionString string) (Version, error) {
 	}
 	return NewVersion(uint8(major), uint8(minor))
 }
+
+//endregion
 
 // region Implementation
 
