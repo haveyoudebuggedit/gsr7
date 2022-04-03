@@ -2,7 +2,6 @@ package gsr7_test
 
 import (
 	"fmt"
-	"sort"
 	"testing"
 
 	"go.debugged.it/gsr7"
@@ -16,6 +15,33 @@ func ExampleParseVersion() {
 	fmt.Println(version)
 
 	// Output: HTTP/1.1
+}
+
+func ExampleNewVersion() {
+	version := gsr7.Must(gsr7.NewVersion(0, 9))
+	fmt.Println(version)
+
+	// Output: HTTP/0.9
+}
+
+func ExampleVersion_Equals() {
+	if gsr7.HTTP10.Equals(gsr7.HTTP11) {
+		fmt.Println("HTTP/1.0 equals HTTP/1.1")
+	} else {
+		fmt.Println("HTTP/1.0 does not equal HTTP/1.1")
+	}
+
+	// Output: HTTP/1.0 does not equal HTTP/1.1
+}
+
+func ExampleVersion_Compare() {
+	if gsr7.HTTP10.Compare(gsr7.HTTP11) < 0 {
+		fmt.Println("HTTP/1.0 is lower than HTTP/1.1")
+	} else {
+		fmt.Println("HTTP/1.0 is not lower than HTTP/1.1")
+	}
+
+	// Output: HTTP/1.0 is lower than HTTP/1.1
 }
 
 func TestParseVersion(t *testing.T) {
@@ -65,28 +91,28 @@ func TestParseVersion(t *testing.T) {
 }
 
 func TestVersionCompare(t *testing.T) {
-	list := []gsr7.Version{
-		gsr7.HTTP20,
-		gsr7.HTTP11,
-		gsr7.HTTP10,
-		gsr7.HTTP09,
-	}
-	sort.Slice(
-		list, func(i, j int) bool {
-			return list[i].Compare(list[j]) > 0
-		},
+	assertSmallerThan(
+		t,
+		gsr7.HTTP09.Compare(gsr7.HTTP10),
+		0,
+		"HTTP/0.9 is not smaller than HTTP/1.1",
 	)
-
-	if !list[0].Equals(gsr7.HTTP09) {
-		t.Fatalf("incorrect list sorting (item 0 is not HTTP/0.9)")
-	}
-	if !list[1].Equals(gsr7.HTTP10) {
-		t.Fatalf("incorrect list sorting (item 0 is not HTTP/1.0)")
-	}
-	if !list[2].Equals(gsr7.HTTP11) {
-		t.Fatalf("incorrect list sorting (item 0 is not HTTP/1.1)")
-	}
-	if !list[3].Equals(gsr7.HTTP20) {
-		t.Fatalf("incorrect list sorting (item 0 is not HTTP/2.0)")
-	}
+	assertSmallerThan(
+		t,
+		gsr7.HTTP10.Compare(gsr7.HTTP11),
+		0,
+		"HTTP/1.0 is not smaller than HTTP/1.1",
+	)
+	assertEquals(
+		t,
+		gsr7.HTTP10.Compare(gsr7.HTTP10),
+		0,
+		"HTTP/1.0 is not equal to HTTP/1.0",
+	)
+	assertEquals(
+		t,
+		gsr7.HTTP11.Compare(gsr7.HTTP11),
+		0,
+		"HTTP/1.0 is not equal to HTTP/1.0",
+	)
 }

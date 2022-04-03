@@ -73,19 +73,21 @@ func ParseVersion(versionString string) (Version, error) {
 	return NewVersion(uint8(major), uint8(minor))
 }
 
+// region Implementation
+
 type version struct {
 	major, minor uint8
 }
 
 func (v version) Compare(other Version) int {
 	if v.major != other.Major() {
-		return int(other.Major() - v.major)
+		return int(v.major) - int(other.Major())
 	}
-	return int(other.Minor() - v.minor)
+	return int(v.minor) - int(other.Minor())
 }
 
 func (v version) Equals(other Version) bool {
-	return v.major == other.Major() && v.minor == other.Minor()
+	return v.Compare(other) == 0
 }
 
 func (v version) String() string {
@@ -99,3 +101,5 @@ func (v version) Major() uint8 {
 func (v version) Minor() uint8 {
 	return v.minor
 }
+
+// endregion
