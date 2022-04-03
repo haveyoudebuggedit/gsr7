@@ -2,7 +2,7 @@ package gsr7
 
 import "time"
 
-type cookie[T cookie] interface {
+type Cookie[T Cookie] interface {
     Name() string
     Value() string
 
@@ -11,11 +11,11 @@ type cookie[T cookie] interface {
 }
 
 type RequestCookie interface {
-    cookie[RequestCookie]
+    Cookie[RequestCookie]
 }
 
 type ResponseCookie interface {
-    cookie[ResponseCookie]
+    Cookie[ResponseCookie]
 
     GetDomain() string
     WithDomain(domain string) (ResponseCookie, error)

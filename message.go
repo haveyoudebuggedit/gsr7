@@ -1,8 +1,14 @@
 package gsr7
 
-type message[T any, R any, C cookie] interface {
-    GetProtocolVersion() string
-    WithProtocolVersion(version string) T
+type Version interface {
+    String() string
+    Major() uint8
+    Minor() uint8
+}
+
+type Message[MessageType any, BodyType any, CookieType Cookie] interface {
+    GetProtocolVersion() Version
+    WithProtocolVersion(version Version) MessageType
 
     GetHeaders() [][]string
 
@@ -10,15 +16,15 @@ type message[T any, R any, C cookie] interface {
     GetHeader(name string) []string
     GetHeaderLine(name string) string
 
-    WithHeader(name, value string) (T, error)
-    WithHeaderValues(name, value []string) (T, error)
-    WithAddedHeader(name, value string) (T, error)
-    WithoutHeader(name string) T
+    WithHeader(name, value string) (MessageType, error)
+    WithHeaderValues(name, value []string) (MessageType, error)
+    WithAddedHeader(name, value string) (MessageType, error)
+    WithoutHeader(name string) MessageType
 
-    GetBody() R
-    WithBody(R) (ClientRequest, error)
+    GetBody() BodyType
+    WithBody(BodyType) (ClientRequest, error)
 
-    GetCookies() []C
-    WithCookie(cookie C) T
-    WithCookies(cookies []C) T
+    GetCookies() []CookieType
+    WithCookie(cookie CookieType) MessageType
+    WithCookies(cookies []CookieType) MessageType
 }

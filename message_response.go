@@ -1,10 +1,10 @@
 package gsr7
 
-type response[T message, R any] interface {
-    message[T, R, ResponseCookie]
+type Response[ResponseType Message, BodyType any] interface {
+    Message[ResponseType, BodyType, ResponseCookie]
 
     GetStatusCode() uint16
-    WithStatusCode(code uint16) (T, error)
-    WithStatus(code uint16, reasonPhrase string) (T, error)
+    WithStatusCode(code uint16) (ResponseType, error)
+    WithStatus(code uint16, reasonPhrase string) (ResponseType, error)
     GetReasonPhrase() string
 }

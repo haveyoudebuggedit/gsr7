@@ -1,14 +1,14 @@
 package gsr7
 
-type request[T request, R any] interface {
-    message[T, R, RequestCookie]
+type Request[RequestType Request, BodyType any] interface {
+    Message[RequestType, BodyType, RequestCookie]
 
     GetRequestTarget() string
-    WithRequestTargetString(requestTarget string) (T, error)
+    WithRequestTargetString(requestTarget string) (RequestType, error)
 
     GetMethod() string
-    WithMethod(method string) (T, error)
+    WithMethod(method string) (RequestType, error)
 
     GetURI() URI
-    WithURI(uri URI, preserveHost bool) T
+    WithURI(uri URI, preserveHost bool) RequestType
 }
