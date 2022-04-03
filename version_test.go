@@ -10,16 +10,13 @@ import (
 //region Examples
 
 func ExampleParseVersion() {
-	version, err := gsr7.ParseVersion("HTTP/1.1")
-	if err != nil {
-		panic(err)
-	}
+	version := gsr7.ParseVersion("HTTP/1.1")
 	fmt.Println(version)
 	// Output: HTTP/1.1
 }
 
 func ExampleNewVersion() {
-	version := gsr7.Must(gsr7.NewVersion(0, 9))
+	version := gsr7.NewVersion(0, 9)
 	fmt.Println(version)
 	// Output: HTTP/0.9
 }
@@ -71,7 +68,7 @@ func TestParseVersion(t *testing.T) {
 	for input, expectedOutput := range validData {
 		t.Run(
 			input, func(t *testing.T) {
-				ver, err := gsr7.ParseVersion(input)
+				ver, err := gsr7.ParseVersionE(input)
 				if err != nil {
 					t.Fatalf("failed to parse %s (%v)", input, err)
 				}
@@ -98,7 +95,7 @@ func TestParseVersion(t *testing.T) {
 		t.Run(
 			input,
 			func(t *testing.T) {
-				_, err := gsr7.ParseVersion(input)
+				_, err := gsr7.ParseVersionE(input)
 				if err == nil {
 					t.Fatalf("parsing the string '%s' did not result in an error", input)
 				}
