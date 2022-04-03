@@ -13,8 +13,10 @@ type Cookie[T any] interface {
 	Name() string
 	Value() string
 
-	WithName(name string) (T, error)
-	WithValue(value string) (T, error)
+	WithName(name string) T
+	WithNameE(name string) (T, error)
+	WithValue(value string) T
+	WithValueE(value string) (T, error)
 
 	// Encode encodes the current cookie into a format compatible with the Cookie or SetCookie header.
 	Encode() string

@@ -69,3 +69,21 @@ func validateCookiePath(path string) validator {
 		return nil
 	}
 }
+
+func validateExtensions(extensions []string) validator {
+	return func() error {
+		for i, extension := range extensions {
+			for j, letter := range extension {
+				if letter < 32 || letter == 127 || letter == ';' {
+					return fmt.Errorf(
+						"invalid extension %d in cookie, character %d is invalid (%d)",
+						i,
+						j,
+						letter,
+					)
+				}
+			}
+		}
+		return nil
+	}
+}

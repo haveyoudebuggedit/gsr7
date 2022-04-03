@@ -12,9 +12,14 @@ import (
 // See https://datatracker.ietf.org/doc/html/rfc6265#section-4.2.2 for details.
 type RequestCookie interface {
 	Cookie[RequestCookie]
+
+	// ToResponse creates a response cookie from this request cookie. The additional parameters can be set on the
+	// returned cookie.
+	ToResponse() ResponseCookie
 }
 
-// NewRequestCookie creates a new request cookie from the specified name and value
+// NewRequestCookie creates a new request cookie from the specified name. The value can be added using the WithValue
+// method.
 func NewRequestCookie(name string) (RequestCookie, error) {
 	if err := validate(
 		validateCookieName(name),
@@ -34,6 +39,13 @@ type requestCookie struct {
 	value string
 }
 
+func (r requestCookie) ToResponse() ResponseCookie {
+	return &responseCookie{
+		name:  r.name,
+		value: r.value,
+	}
+}
+
 func (r requestCookie) Name() string {
 	return r.name
 }
@@ -42,7 +54,11 @@ func (r requestCookie) Value() string {
 	return r.value
 }
 
-func (r requestCookie) WithName(name string) (RequestCookie, error) {
+func (r requestCookie) WithName(name string) RequestCookie {
+	return Must(r.WithNameE(name))
+}
+
+func (r requestCookie) WithNameE(name string) (RequestCookie, error) {
 	if err := validate(validateCookieName(name)); err != nil {
 		return nil, err
 	}
@@ -52,7 +68,11 @@ func (r requestCookie) WithName(name string) (RequestCookie, error) {
 	}, nil
 }
 
-func (r requestCookie) WithValue(value string) (RequestCookie, error) {
+func (r requestCookie) WithValue(value string) RequestCookie {
+	return Must(r.WithValueE(value))
+}
+
+func (r requestCookie) WithValueE(value string) (RequestCookie, error) {
 	return &requestCookie{
 		name:  r.name,
 		value: value,
