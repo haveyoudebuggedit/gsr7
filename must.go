@@ -1,4 +1,4 @@
-package psr7
+package gsr7
 
 func Must[T any](value T, err error) T {
     if err != nil {

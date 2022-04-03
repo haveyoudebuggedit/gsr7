@@ -1,6 +1,6 @@
-package psr7
+package gsr7
 
-type Message[T any, R any] interface {
+type message[T any, R any, C cookie] interface {
     GetProtocolVersion() string
     WithProtocolVersion(version string) T
 
@@ -17,4 +17,8 @@ type Message[T any, R any] interface {
 
     GetBody() R
     WithBody(R) (ClientRequest, error)
+
+    GetCookies() []C
+    WithCookie(cookie C) T
+    WithCookies(cookies []C) T
 }

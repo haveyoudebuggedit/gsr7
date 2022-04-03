@@ -1,5 +1,5 @@
-package psr7
+package gsr7
 
 type ClientResponse interface {
-    Response[ClientResponse, ReadableStream]
+    response[ClientResponse, ReadableStream]
 }

@@ -1,7 +1,8 @@
-package psr7
+package gsr7
 
 type URI interface {
     String() string
+
     GetScheme() string
     GetAuthority() string
     GetUserInfo() string

@@ -1,5 +1,5 @@
-package psr7
+package gsr7
 
 type ClientRequest interface {
-    Request[ClientRequest, WritableStream]
+    request[ClientRequest, WritableStream]
 }

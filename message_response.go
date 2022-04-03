@@ -1,7 +1,7 @@
-package psr7
+package gsr7
 
-type Response[T Message] interface {
-    Message[T]
+type response[T message, R any] interface {
+    message[T, R, ResponseCookie]
 
     GetStatusCode() uint16
     WithStatus(code uint16, reasonPhrase string) (T, error)

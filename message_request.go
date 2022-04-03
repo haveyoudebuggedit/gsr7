@@ -1,7 +1,7 @@
-package psr7
+package gsr7
 
-type Request[T Request, R any] interface {
-    Message[T, R]
+type request[T request, R any] interface {
+    message[T, R, RequestCookie]
 
     GetRequestTarget() string
     WithRequestTargetString(requestTarget string) (T, error)

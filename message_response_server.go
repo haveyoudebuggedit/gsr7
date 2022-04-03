@@ -1,5 +1,5 @@
-package psr7
+package gsr7
 
 type ServerResponse interface {
-    Response[ServerResponse, WritableStream]
+    response[ServerResponse, WritableStream]
 }
